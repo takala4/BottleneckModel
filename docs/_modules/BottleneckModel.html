@@ -1,0 +1,407 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>BottleneckModel &mdash; Bottleneck Model 1.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+        <script src="../_static/mathjaxconf.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Bottleneck Model
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../main.html">Departure time choice problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../BottleneckModel.html">BottleneckModel</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../test.html">Sample of DUE problem</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Bottleneck Model</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Module code</a> &raquo;</li>
+        
+      <li>BottleneckModel</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for BottleneckModel</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;Vickrey&#39;s bottleneck model</span>
+
+<span class="sd">This is a numerical program of Vickrey&#39;s bottleneck model.</span>
+<span class="sd">Departure time choice problem</span>
+<span class="sd">DSO and DUE</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">cvxpy</span> <span class="k">as</span> <span class="nn">cp</span>
+
+<div class="viewcode-block" id="parameter"><a class="viewcode-back" href="../BottleneckModel.html#BottleneckModel.parameter">[docs]</a><span class="k">class</span> <span class="nc">parameter</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;parameter</span>
+<span class="sd">    </span>
+<span class="sd">    This is a parameter class.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        </span>
+<span class="sd">    Args:</span>
+<span class="sd">        K (int) : Number of groups</span>
+<span class="sd">        Q (np.array) : Total demand (vector)</span>
+<span class="sd">        T (int) : Number of time steps</span>
+<span class="sd">        s (np.array) : Schedule delay matrix</span>
+<span class="sd">        mu (float) : capacity</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">mu</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">K</span> <span class="o">=</span> <span class="n">K</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">Q</span> <span class="o">=</span> <span class="n">Q</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">T</span> <span class="o">=</span> <span class="n">T</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">s</span> <span class="o">=</span> <span class="n">s</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mu</span> <span class="o">=</span> <span class="n">mu</span></div>
+        
+    
+
+<div class="viewcode-block" id="DSO_model"><a class="viewcode-back" href="../BottleneckModel.html#BottleneckModel.DSO_model">[docs]</a><span class="k">class</span> <span class="nc">DSO_model</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;DSO model </span>
+<span class="sd">    This is a DSO model class.</span>
+
+<span class="sd">    Args:</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Parameter</span> <span class="o">=</span> <span class="n">Parameter</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Create_Sigma</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Create_A</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Create_Q</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Create_mu</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Create_s</span><span class="p">()</span>
+
+        
+<div class="viewcode-block" id="DSO_model.Create_Sigma"><a class="viewcode-back" href="../BottleneckModel.html#BottleneckModel.DSO_model.Create_Sigma">[docs]</a>    <span class="k">def</span> <span class="nf">Create_Sigma</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create matrix Sigma (OD demand constraint)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Sigma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">),</span>\
+                             <span class="n">np</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">K</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">))</span></div>
+<div class="viewcode-block" id="DSO_model.Create_A"><a class="viewcode-back" href="../BottleneckModel.html#BottleneckModel.DSO_model.Create_A">[docs]</a>    <span class="k">def</span> <span class="nf">Create_A</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create matrix A (Bottleneck capacity constraint)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">K</span><span class="p">)))</span></div>
+        
+<div class="viewcode-block" id="DSO_model.Create_Q"><a class="viewcode-back" href="../BottleneckModel.html#BottleneckModel.DSO_model.Create_Q">[docs]</a>    <span class="k">def</span> <span class="nf">Create_Q</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create OD demand vector Q</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Q</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">Q</span></div>
+    
+
+<div class="viewcode-block" id="DSO_model.Create_mu"><a class="viewcode-back" href="../BottleneckModel.html#BottleneckModel.DSO_model.Create_mu">[docs]</a>    <span class="k">def</span> <span class="nf">Create_mu</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create capacity vector Q</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mu</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">mu</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">T</span><span class="p">)</span></div>
+        
+
+<div class="viewcode-block" id="DSO_model.Create_s"><a class="viewcode-back" href="../BottleneckModel.html#BottleneckModel.DSO_model.Create_s">[docs]</a>    <span class="k">def</span> <span class="nf">Create_s</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create schedule delay function</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">s</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span></div>
+        
+        
+<div class="viewcode-block" id="DSO_model.solve"><a class="viewcode-back" href="../BottleneckModel.html#BottleneckModel.DSO_model.solve">[docs]</a>    <span class="k">def</span> <span class="nf">solve</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method to solve DSO problem as LP</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">T</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">K</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+
+        <span class="n">solver_list</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">installed_solvers</span><span class="p">()</span>
+        
+        <span class="n">objective</span>   <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">Minimize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="nd">@x</span><span class="p">)</span>
+        <span class="n">constraints</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="nd">@x</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mu</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Sigma</span><span class="nd">@x</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">Q</span><span class="p">,</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">]</span>    <span class="c1">#制約条件</span>
+        <span class="n">prob</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">Problem</span><span class="p">(</span><span class="n">objective</span><span class="p">,</span> <span class="n">constraints</span><span class="p">)</span>
+        <span class="n">prob</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">solver</span><span class="o">=</span><span class="n">cp</span><span class="o">.</span><span class="n">GUROBI</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">solution</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">solution</span><span class="p">[</span><span class="s1">&#39;q&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">solution</span><span class="p">[</span><span class="s1">&#39;p&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">prob</span><span class="o">.</span><span class="n">constraints</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">dual_value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">solution</span><span class="p">[</span><span class="s1">&#39;rho&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span> <span class="n">prob</span><span class="o">.</span><span class="n">constraints</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">dual_value</span></div></div>
+    
+
+<div class="viewcode-block" id="DUE_model"><a class="viewcode-back" href="../BottleneckModel.html#BottleneckModel.DUE_model">[docs]</a><span class="k">class</span> <span class="nc">DUE_model</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;DUE model </span>
+<span class="sd">    This is a DUE model class.</span>
+
+<span class="sd">    Args:</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Parameter</span> <span class="o">=</span> <span class="n">Parameter</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Create_Sigma</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Create_A</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Create_Q</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Create_mu</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Create_s</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Create_M</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Create_b</span><span class="p">()</span>
+        
+<div class="viewcode-block" id="DUE_model.Create_Sigma"><a class="viewcode-back" href="../BottleneckModel.html#BottleneckModel.DUE_model.Create_Sigma">[docs]</a>    <span class="k">def</span> <span class="nf">Create_Sigma</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create matrix Sigma (OD demand constraint)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Sigma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">),</span>\
+                             <span class="n">np</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">K</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">))</span></div>
+<div class="viewcode-block" id="DUE_model.Create_A"><a class="viewcode-back" href="../BottleneckModel.html#BottleneckModel.DUE_model.Create_A">[docs]</a>    <span class="k">def</span> <span class="nf">Create_A</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create matrix A (Bottleneck capacity constraint)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">K</span><span class="p">)))</span></div>
+        
+<div class="viewcode-block" id="DUE_model.Create_Q"><a class="viewcode-back" href="../BottleneckModel.html#BottleneckModel.DUE_model.Create_Q">[docs]</a>    <span class="k">def</span> <span class="nf">Create_Q</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create OD demand vector Q</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Q</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">Q</span></div>
+    
+
+<div class="viewcode-block" id="DUE_model.Create_mu"><a class="viewcode-back" href="../BottleneckModel.html#BottleneckModel.DUE_model.Create_mu">[docs]</a>    <span class="k">def</span> <span class="nf">Create_mu</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create capacity vector Q</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mu</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">mu</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">T</span><span class="p">)</span></div>
+        
+
+<div class="viewcode-block" id="DUE_model.Create_s"><a class="viewcode-back" href="../BottleneckModel.html#BottleneckModel.DUE_model.Create_s">[docs]</a>    <span class="k">def</span> <span class="nf">Create_s</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create schedule delay function</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">s</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">s</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span></div>
+        
+<div class="viewcode-block" id="DUE_model.Create_M"><a class="viewcode-back" href="../BottleneckModel.html#BottleneckModel.DUE_model.Create_M">[docs]</a>    <span class="k">def</span> <span class="nf">Create_M</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create create matrix M</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">Num_ODTIME</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">K</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">M11</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">Num_ODTIME</span><span class="p">,</span> <span class="n">Num_ODTIME</span><span class="p">))</span>
+
+        
+        <span class="n">M22</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">T</span><span class="p">))</span>
+        <span class="n">M23</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">K</span><span class="p">))</span>
+        <span class="n">M33</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">K</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">K</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">block</span><span class="p">([[</span><span class="n">M11</span>   <span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="o">.</span><span class="n">T</span> <span class="p">,</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">Sigma</span><span class="o">.</span><span class="n">T</span><span class="p">],</span>\
+                           <span class="p">[</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="p">,</span> <span class="n">M22</span>     <span class="p">,</span> <span class="n">M23</span><span class="p">],</span>\
+                           <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">Sigma</span><span class="p">,</span> <span class="n">M23</span><span class="o">.</span><span class="n">T</span>  <span class="p">,</span> <span class="n">M33</span><span class="p">]])</span></div>
+        
+<div class="viewcode-block" id="DUE_model.Create_b"><a class="viewcode-back" href="../BottleneckModel.html#BottleneckModel.DUE_model.Create_b">[docs]</a>    <span class="k">def</span> <span class="nf">Create_b</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create create vector b</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">block</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mu</span><span class="p">,</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">Q</span><span class="p">])</span></div>
+
+
+
+<div class="viewcode-block" id="DUE_model.solve"><a class="viewcode-back" href="../BottleneckModel.html#BottleneckModel.DUE_model.solve">[docs]</a>    <span class="k">def</span> <span class="nf">solve</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method to solve DUE problem as QP</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">M</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+
+        <span class="n">solver_list</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">installed_solvers</span><span class="p">()</span>
+        
+        <span class="n">objective</span>   <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">Minimize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="nd">@x</span><span class="p">)</span>
+        <span class="n">constraints</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">M</span><span class="nd">@x</span> <span class="o">&gt;=</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span>  <span class="p">,</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">]</span>    <span class="c1">#制約条件[]</span>
+        <span class="n">prob</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">Problem</span><span class="p">(</span><span class="n">objective</span><span class="p">,</span> <span class="n">constraints</span><span class="p">)</span>
+        <span class="n">prob</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">solver</span><span class="o">=</span><span class="n">cp</span><span class="o">.</span><span class="n">GUROBI</span><span class="p">)</span>
+
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">solution</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">K</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">K</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">solution</span><span class="p">[</span><span class="s1">&#39;q&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">value</span><span class="p">[:</span><span class="n">T</span><span class="o">*</span><span class="n">K</span><span class="p">:]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">solution</span><span class="p">[</span><span class="s1">&#39;w&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">value</span><span class="p">[</span><span class="n">T</span><span class="o">*</span><span class="n">K</span><span class="p">:</span><span class="n">T</span><span class="o">*</span><span class="n">K</span><span class="o">+</span><span class="n">T</span><span class="p">:]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">solution</span><span class="p">[</span><span class="s1">&#39;rho&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">value</span><span class="p">[</span><span class="n">T</span><span class="o">*</span><span class="n">K</span><span class="o">+</span><span class="n">T</span><span class="p">:]</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, Takala.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

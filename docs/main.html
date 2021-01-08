@@ -1,0 +1,380 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Departure time choice problem &mdash; Bottleneck Model 1.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+        <script src="_static/mathjaxconf.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="BottleneckModel" href="BottleneckModel.html" />
+    <link rel="prev" title="Welcome to packages’s documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Bottleneck Model
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Departure time choice problem</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#references">References</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#model-and-framework">Model and Framework</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#parameters">Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#variables">Variables</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#dynamic-system-optimal-dso">Dynamic system optimal : DSO</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#objective-function">Objective function</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#od-cnsv">OD cnsv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#capacity-constraint">Capacity constraint</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#dynamic-user-equilibrium-due">Dynamic user equilibrium : DUE</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#departure-time-choice-condition">Departure time choice condition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id1">OD cnsv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bottleneck">Bottleneck</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#lcp">LCP</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#solving-method-and-algorithm">Solving method and algorithm</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="BottleneckModel.html">BottleneckModel</a></li>
+<li class="toctree-l1"><a class="reference internal" href="test.html">Sample of DUE problem</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Bottleneck Model</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Departure time choice problem</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/main.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="departure-time-choice-problem">
+<h1>Departure time choice problem<a class="headerlink" href="#departure-time-choice-problem" title="Permalink to this headline">¶</a></h1>
+<p>The modeling and analysis of rush-hour traffic congestion has a rich history,
+dating back tothe seminal work of Vickrey (1969). In the basic model proposed by Vickrey,
+it is assumed that afixed number of commuters with homogeneous preferences wish to arrive at a single destination(workplace) at the same preferred time, traveling through a single route that has a bottleneckof a fixed capacity.
+Each commuter chooses the departure time of his/her trip from home tominimize his/her generalized trip cost,
+including trip time, queuing delay at the bottleneck andschedule delay (i.e., costs of arriving early or late at their destination). The problem is to deter-mine a dynamic equilibrium distribution of departure times for which no commuter can reducehis/her generalized cost by changing his/her departure time unilaterally.</p>
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Vickrey</p></li>
+<li><p>New look</p></li>
+</ul>
+</div>
+<div class="section" id="model-and-framework">
+<h2>Model and Framework<a class="headerlink" href="#model-and-framework" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>総需要：$Q$</p></li>
+<li><p>希望到着時刻：$t^{\ast}$</p></li>
+<li><p>目的地到着時刻：$t$</p></li>
+<li><p>スケジュールコスト：$s(t;t^{\ast}) = s(t)$</p></li>
+<li><p>自由流走行時間：$d$</p></li>
+<li><p>ボトルネック容量：$\mu$</p></li>
+</ul>
+</div>
+<div class="section" id="variables">
+<h3>Variables<a class="headerlink" href="#variables" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>到着流出フロー：$q(t)$</p></li>
+<li><p>ボトルネック流入フロー：$\lambda(t)$</p></li>
+<li><p>累積流出曲線：$D(\sigma(t))$</p></li>
+<li><p>累積流入曲線：$A(\tau(t))$</p></li>
+<li><p>待ち行列遅れ時間：$w(t)$</p></li>
+<li><p>均衡コスト：$\rho$</p></li>
+</ul>
+<p>$$
+t = \tau(t) + w(t) + d
+\
+\sigma = \tau(t) + w(t)
+$$</p>
+</div>
+</div>
+<div class="section" id="dynamic-system-optimal-dso">
+<h2>Dynamic system optimal : DSO<a class="headerlink" href="#dynamic-system-optimal-dso" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="objective-function">
+<h3>Objective function<a class="headerlink" href="#objective-function" title="Permalink to this headline">¶</a></h3>
+<p>$$
+\sum_{k \in \ClK} \int_{\ClT} q^{k}(t) s^{k}(t) \mathrm{d} t
+$$</p>
+</div>
+<div class="section" id="od-cnsv">
+<h3>OD cnsv<a class="headerlink" href="#od-cnsv" title="Permalink to this headline">¶</a></h3>
+<p>$$
+\int_{\mathcal{T}} q(t) \mathrm{d} t = Q
+$$</p>
+</div>
+<div class="section" id="capacity-constraint">
+<h3>Capacity constraint<a class="headerlink" href="#capacity-constraint" title="Permalink to this headline">¶</a></h3>
+<p>$$
+&amp;\sum_{k \in \ClK} q^{k}(t) = \mu \quad \Rightarrow \quad p(t) &gt; 0
+\\
+&amp;\sum_{k \in \ClK} q^{k}(t) &lt; \mu \quad \Rightarrow \quad p(t) = 0
+$$</p>
+</div>
+</div>
+<div class="section" id="dynamic-user-equilibrium-due">
+<h2>Dynamic user equilibrium : DUE<a class="headerlink" href="#dynamic-user-equilibrium-due" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="departure-time-choice-condition">
+<h3>Departure time choice condition<a class="headerlink" href="#departure-time-choice-condition" title="Permalink to this headline">¶</a></h3>
+<p>誰もが出発時刻変更のインセンティブを持たない状態である．</p>
+<p>$$
+\mu(t) &gt; 0 \quad \Rightarrow \quad d + w(t) + s(t) = \rho
+\
+\mu(t) = 0 \quad \Rightarrow \quad d + w(t) + s(t) \geq \rho
+$$</p>
+</div>
+<div class="section" id="id1">
+<h3>OD cnsv<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>配分対象時間帯においてOD需要は保存される：</p>
+<p>$$
+\int_{\mathcal{T}} q(t) \mathrm{d} t = Q
+$$</p>
+<p>均衡コスト変数$\rho$と併せて，
+相補性条件の形で記述する：</p>
+<p>$$
+\int_{\mathcal{T}} q(t) \mathrm{d} t = Q
+\quad \Rightarrow \quad
+\rho &gt; 0
+\
+\int_{\mathcal{T}} q(t) \mathrm{d} t &lt; Q
+\quad \Rightarrow \quad
+\rho = 0
+$$</p>
+</div>
+<div class="section" id="bottleneck">
+<h3>Bottleneck<a class="headerlink" href="#bottleneck" title="Permalink to this headline">¶</a></h3>
+<p>$$
+q(t) = \mu \quad \Rightarrow \quad w(t) &gt; 0
+\
+q(t) &lt; \mu \quad \Rightarrow \quad w(t) = 0
+$$</p>
+</div>
+<div class="section" id="lcp">
+<h3>LCP<a class="headerlink" href="#lcp" title="Permalink to this headline">¶</a></h3>
+<p>find $q(t), w(t), \rho$</p>
+<p>such that.</p>
+<p>\begin{align}
+&amp;0 \leq - \rho  + d + w(t) + s(t) \perp q(t) \geq 0 \quad \forall t
+\\
+&amp;0 \leq - \int q(t) \mathrm{d} t  + Q \perp \rho \geq 0
+\\
+&amp;0 \leq - q(t-d) + \mu \perp w(t) \geq 0 \quad \forall t
+\end{align}</p>
+</div>
+</div>
+<div class="section" id="solving-method-and-algorithm">
+<h2>Solving method and algorithm<a class="headerlink" href="#solving-method-and-algorithm" title="Permalink to this headline">¶</a></h2>
+<p>This package solves DSO and DUE as LP and QP, respectively.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="BottleneckModel.html" class="btn btn-neutral float-right" title="BottleneckModel" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to packages’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, Takala.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
