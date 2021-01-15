@@ -44,6 +44,7 @@ extensions = [
     'sphinx.ext.mathjax',
     'recommonmark',
     'nbsphinx',
+    'sphinx.ext.githubpages',
 ]
 
 
